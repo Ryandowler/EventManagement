@@ -11,7 +11,8 @@ public class Event {
     private int maxAttendees;
     private double cost;
 
-    //creating the constructor, needed as my above variables are private, so this is how i access them
+    //new comment
+//creating the constructor, needed as my above variables are private, so this is how i access them 1
     public Event(int eID, String t, String d, String sd, String ed, String tm, int ma, double c) {
         this.eventID = eID;
         this.title = t;
