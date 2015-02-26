@@ -65,9 +65,9 @@ public class MainApp {
     private static void deleteEvent(Scanner keyboard, Model model) {
         System.out.println("Deleting Event");
         System.out.println("Enter the the ID of the Event you would like to Delete");
-        int getEventID = Integer.parseInt(keyboard.nextLine());
+        int eventID = Integer.parseInt(keyboard.nextLine());
         Event e;
-        e = model.findEventByThe_eID(getEventID);
+        e = model.findEventByThe_eID(eventID);
         if (e != null) {
             if (model.removeEvent(e)) {
                 System.out.println("Event Deleted");
@@ -102,11 +102,13 @@ public class MainApp {
     private static void viewEvents(Model mdl) {
         List<Event> events = mdl.getEvents();
         System.out.println();
-        if (!events.isEmpty()) {
+        if (events.isEmpty()) {
             System.out.println("There are no events to see");
-            System.out.printf("%7s %40s %50s %20s %20s %20s %20s %9s\n", "eventID", "Title", "description", "startDate", "endDate", "time", "maxAttendees", "cost");
+        }
+        else{
+            System.out.printf("%7s %40s %50s %20s %20s %20s %20s %9s\n", "eventID", "Title", "description", "startDate", "endDate", "time", "maxAttendees", "cost", "manager");
             for (Event ev : events) {
-                System.out.printf("%7d %40s %50s %20s %20s %20s %20d %9.2f\n",
+                System.out.printf("%7d %40s %50s %20s %20s %20s %20d %9.2f %7s\n",
                         ev.getEventID(),
                         ev.getTitle(),
                         ev.getDescription(),
@@ -114,7 +116,8 @@ public class MainApp {
                         ev.getEndDate(),
                         ev.getTime(),
                         ev.getMaxAttendees(),
-                        ev.getCost()
+                        ev.getCost(),
+                        ev.getManagerID()
                 );
             }
         }
@@ -125,7 +128,7 @@ public class MainApp {
     //Utility Methods used by main methods ^^
     private static Event readEvent(Scanner keyb) {
         String title, description, startDate, endDate, time;
-        int maxAttendees;
+        int maxAttendees, managerID;
         double cost;
         String line; //buffer variable 
 
@@ -138,9 +141,11 @@ public class MainApp {
         maxAttendees = Integer.parseInt(line);
         line = getString(keyb, "what is the price for this event? ");
         cost = Double.parseDouble(line);
+        line = getString(keyb, "Enter the manager ID (enter -1 for no manager):");
+        managerID= Integer.parseInt(line);
 
         Event e
-                = new Event(title, description, startDate, endDate, time, maxAttendees, cost);
+                = new Event(title, description, startDate, endDate, time, maxAttendees, cost, managerID);
 
         return e;
     }
@@ -152,9 +157,9 @@ public class MainApp {
 
     private static void editEventDetails(Scanner kb, Event e) {
         String title, desription, startDate, endDate, time;
-        int maxAttendees;
+        int maxAttendees, managerID;
         double cost;
-        String box1, box2;
+        String box1, box2, box3;
 
         title = getString(kb, "Enter the Title[" + e.getTitle() + "] ");
         desription = getString(kb, "Enter the desription[" + e.getDescription() + "] ");
@@ -163,6 +168,7 @@ public class MainApp {
         time = getString(kb, "Enter the Time[" + e.getTime() + "] ");
         box1 = getString(kb, "Enter the Max Attendees[" + e.getMaxAttendees() + "] ");
         box2 = getString(kb, "Enter the cost[" + e.getCost() + "] ");
+        box3 = getString(kb, "Enter the manager ID[" + e.getManagerID() + "] ");
 
         //if field is not empty the entered data becomes the new titl/description
         if (title.length() != 0) {
@@ -187,6 +193,10 @@ public class MainApp {
         if (box2.length() != 0) {
             cost = Double.parseDouble(box2);
             e.setCost(cost);
+        }
+        if (box3.length() != 0) {
+            managerID = Integer.parseInt(box3);
+            e.setManagerID(managerID);
         }
 
     }
