@@ -19,7 +19,9 @@ public class Model {
     }
 
     List<Event> events;
+    List<Manager> managers;
     EventTableGateway eventGateway;
+    ManagerTableGateway managerGateway;
 
     // connecting to DB
 
@@ -28,7 +30,10 @@ public class Model {
             Connection conn = DBConnection.getInstance();
             //conn (connection object) being used as a parametor 
             this.eventGateway = new EventTableGateway(conn);
+            this.managerGateway = new ManagerTableGateway(conn);
+            
             this.events = this.eventGateway.getEvents();
+            this.managers = this.managerGateway.getManagers();
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -40,7 +45,11 @@ public class Model {
     public boolean addEvent(Event e) {
         boolean successful = false;
         try {
-            int eID = this.eventGateway.insertEvent(e.getTitle(), e.getDescription(), e.getStartDate(), e.getEndDate(), e.getTime(), e.getMaxAttendees(), e.getCost());
+            int eID = this.eventGateway.insertEvent
+            (e.getTitle(), e.getDescription(), e.getStartDate(),
+                    e.getEndDate(), e.getTime(), e.getMaxAttendees(), e.getCost(), e.getManagerID());
+            
+            
             if (eID != -1) {
                 e.setEventID(eID);
                 this.events.add(e);
@@ -96,5 +105,80 @@ public class Model {
         }
         return updated;
     }
+    
+    
+    public boolean addManager(Manager m) {
+        boolean result = false;
+        try {
+            int managerID = this.managerGateway.insertManager(m.getName());
+            if (managerID != -1) {
+                m.setManagerID(managerID);
+                this.managers.add(m);
+                result = true;
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
+    public boolean removeManager(Manager m) {
+        boolean removed = false;
+
+        try {
+            removed = this.managerGateway.deleteManager(m.getManagerID());
+            if (removed) {
+                removed = this.managers.remove(m);
+            }
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return removed;
+    }
+    
+    Manager findManagerById(int managerID) {
+        Manager m = null;
+        int i = 0;
+        boolean found = false;
+        while (i < this.managers.size() && !found) {
+            m = this.managers.get(i);
+            if (m.getManagerID() == managerID) {
+                found = true;
+            } else {
+                i++;
+            }
+        }
+        if (!found) {
+            m = null;
+        }
+        return m;
+    }
+    
+    boolean updateManager(Manager m) {
+        boolean updated = false;
+
+        try {
+            updated = this.managerGateway.updateManager(m);
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return updated;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 }
