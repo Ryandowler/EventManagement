@@ -10,10 +10,11 @@ public class Event {
     private String time;
     private int maxAttendees;
     private double cost;
+    private int managerID;
 //yet another
     //new comment
 //creating the constructor, needed as my above variables are private, so this is how i access them 1
-    public Event(int eID, String t, String d, String sd, String ed, String tm, int ma, double c) {
+    public Event(int eID, String t, String d, String sd, String ed, String tm, int ma, double c, int mID) {
         this.eventID = eID;
         this.title = t;
         this.description = d;
@@ -22,10 +23,11 @@ public class Event {
         this.time = tm;
         this.maxAttendees = ma;
         this.cost = c;
+        this.managerID = mID;
     }
 
-    public Event(String t, String d, String sd, String ed, String tm, int ma, double c) {
-        this(-1, t, d, sd, ed, tm, ma, c);
+    public Event(String t, String d, String sd, String ed, String tm, int ma, double c, int mID) {
+        this(-1, t, d, sd, ed, tm, ma, c, mID);
     }
 
     public int getEventID() {
@@ -91,5 +93,14 @@ public class Event {
     public void setCost(double cost) {
         this.cost = cost;
     }
+    
+    public int getManagerID() {
+        return managerID;
+    }
+
+    public void setManagerID(int managerID) {
+        this.managerID = managerID;
+    }
+
 
 }
