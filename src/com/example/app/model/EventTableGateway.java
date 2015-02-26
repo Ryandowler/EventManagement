@@ -21,6 +21,7 @@ public class EventTableGateway {
     private static final String COLUMN_TIME = "time";
     private static final String COLUMN_MAX_ATTENDEES = "maxAttendees";
     private static final String COLUMN_COST = "cost";
+    private static final String COLUMN_MANAGER_ID = "managerID";
 
     public EventTableGateway(Connection connection) {
         mConnection = connection;
@@ -31,8 +32,13 @@ public class EventTableGateway {
         Statement stmt;                 // the java.sql.Statement object used to execute the SQL query
         ResultSet rs;                   // the java.sql.ResultSet representing the result of SQL query
         List<Event> events;             // the java.util.List containing the Event objects created for each row
-        // in the result of the query the id of a event
+                                         // in the result of the query the id of a event
 
+       // String title, description, startDate, endDate;
+       // int eventID, maxAttendees, managerID;
+       // double cost;
+        
+       
         Event e;                   // a Event object created from a row in the result of the query
 
         // execute an SQL SELECT statement to get a java.util.ResultSet representing
@@ -54,14 +60,18 @@ public class EventTableGateway {
             String time = rs.getString(COLUMN_TIME);
             int maxAttendees = rs.getInt(COLUMN_MAX_ATTENDEES);
             double cost = rs.getDouble(COLUMN_COST);
+            int managerID = rs.getInt(COLUMN_MANAGER_ID);
+            if (rs.wasNull()) {
+                managerID = -1;
+            }
 
-            e = new Event(eID, title, description, startDate, endDate, time, maxAttendees, cost);
+            e = new Event(eID, title, description, startDate, endDate, time, maxAttendees, cost, managerID);
             events.add(e);
         }
         return events;
     }
 
-    public int insertEvent(String t, String d, String sd, String ed, String tm, int ma, double c) throws SQLException {
+    public int insertEvent(String t, String d, String sd, String ed, String tm, int ma, double c, int mID) throws SQLException {
 
         String query;       // the SQL query to execute
         PreparedStatement stmt;         // the java.sql.PreparedStatement object used to execute the SQL query
@@ -76,8 +86,9 @@ public class EventTableGateway {
                 + COLUMN_END_DATE + ", "
                 + COLUMN_TIME + ", "
                 + COLUMN_MAX_ATTENDEES + ", "
-                + COLUMN_COST
-                + ") VALUES (?, ?, ?, ?, ?, ?, ?)";
+                + COLUMN_COST + ", "
+                + COLUMN_MANAGER_ID
+                + ") VALUES (?, ?, ?, ?, ?, ?, ?,?)";
 
         // create a PreparedStatement object to execute the query and insert the values into the query
         stmt = mConnection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -88,6 +99,13 @@ public class EventTableGateway {
         stmt.setString(5, tm);
         stmt.setInt(6, ma);
         stmt.setDouble(7, c);
+        //stmt.setInt(8, mID);
+        if (mID == -1) {
+            stmt.setNull(8, java.sql.Types.INTEGER);
+        }
+        else {
+            stmt.setInt(8, mID);
+        }
 
         //  execute the query and make sure that one and only one row was inserted into the database
         numRowsAffected = stmt.executeUpdate();
@@ -112,6 +130,7 @@ public class EventTableGateway {
 
         stmt = mConnection.prepareStatement(query);
         stmt.setInt(1, ID);
+        numRowsAffected = stmt.executeUpdate();
 
         return (numRowsAffected == 1);
     }
@@ -122,7 +141,7 @@ public class EventTableGateway {
         String query;       // the SQL query to execute
         PreparedStatement stmt;         // the java.sql.PreparedStatement object used to execute the SQL query
         int numRowsAffected;
-        int eID = -1;
+        int mID = -1;
 
         // the required SQL INSERT statement with place holders for the values to be inserted into the database
         query = "UPDATE " + TABLE_NAME + " SET "
@@ -132,7 +151,8 @@ public class EventTableGateway {
                 + COLUMN_END_DATE + " = ?, "
                 + COLUMN_TIME + " = ?, "
                 + COLUMN_MAX_ATTENDEES + " = ?, "
-                + COLUMN_COST + " = ? "
+                + COLUMN_COST + " = ?, "
+                + COLUMN_MANAGER_ID + " = ? "
                 + " WHERE " + COLUMN_ID + " = ? ";
 
         // create a PreparedStatement object to execute the query and insert the values into the query
@@ -144,7 +164,15 @@ public class EventTableGateway {
         stmt.setString(5, e.getTime());
         stmt.setInt(6, e.getMaxAttendees());
         stmt.setDouble(7, e.getCost());
-        stmt.setInt(8, e.getEventID());
+        mID = e.getManagerID();
+        if (mID == -1) {
+            stmt.setNull(8, java.sql.Types.INTEGER);
+        }
+        else {
+            stmt.setInt(8, mID);
+        }
+        stmt.setInt(9, e.getManagerID());
+
 
         //  execute the query 
         numRowsAffected = stmt.executeUpdate();
