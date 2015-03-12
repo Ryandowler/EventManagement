@@ -106,7 +106,11 @@ public class Model {
         return updated;
     }
     
-    
+    //MANAGER TABLE----------------------------------------#
+    //array of managers
+    public List<Manager> getManagers() {
+        return this.managers;
+    }
     public boolean addManager(Manager m) {
         boolean result = false;
         try {
