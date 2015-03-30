@@ -55,38 +55,48 @@ public class MainApp {
 
     //Delete Event Method
     private static void deleteEvent(Scanner keyboard, Model model) {
-        System.out.println("Deleting Event");
-        System.out.println("Enter the the ID of the Event you would like to Delete");
-        int eventID = Integer.parseInt(keyboard.nextLine());
-        Event e;
-        e = model.findEventByThe_eID(eventID);
-        if (e != null) {
-            if (model.removeEvent(e)) {
-                System.out.println("Event Deleted");
+        try {
+            System.out.println("Deleting Event");
+            System.out.println("Enter the the ID of the Event you would like to Delete");
+            int eventID = Integer.parseInt(keyboard.nextLine());
+            Event e;
+            e = model.findEventByThe_eID(eventID);
+            if (e != null) {
+                if (model.removeEvent(e)) {
+                    System.out.println("Event Deleted");
+                } else {
+                    System.out.println("Event not Deleted");
+                }
             } else {
-                System.out.println("Event not Deleted");
+                System.out.println("Event not found");
             }
-        } else {
-            System.out.println("Event not found");
+        } catch (NumberFormatException e) {
+            System.out.println("-Incorrect Data Type Or Null Input.");
+            System.out.println("Number Format Exception: " + e.getMessage() + ".\n");
         }
     }
 
     //edit an event
     private static void editEvent(Scanner kb, Model model) {
-        System.out.println("Enter the the ID of the Event you would like to Edit");
-        int eventID = Integer.parseInt(kb.nextLine());
-        Event e;
+        try {
+            System.out.println("Enter the the ID of the Event you would like to Edit");
+            int eventID = Integer.parseInt(kb.nextLine());
+            Event e;
 
-        e = model.findEventByThe_eID(eventID);
-        if (e != null) {
-            editEventDetails(kb, e);
-            if (model.updateEvent(e)) {
-                System.out.println("Event Updated\n");
+            e = model.findEventByThe_eID(eventID);
+            if (e != null) {
+                editEventDetails(kb, e);
+                if (model.updateEvent(e)) {
+                    System.out.println("Event Updated\n");
+                } else {
+                    System.out.println("Event not Updated\n");
+                }
             } else {
-                System.out.println("Event not Updated\n");
+                System.out.println("Event not found!!\n");
             }
-        } else {
-            System.out.println("Event not found!!\n");
+        } catch (NumberFormatException e) {
+            System.out.println("-Incorrect Data Type Or Null Input.");
+            System.out.println("Number Format Exception: " + e.getMessage() + ".\n");
         }
 
     }
@@ -157,29 +167,33 @@ public class MainApp {
 
     //Utility Methods used by main methods ^^
     private static Event readEvent(Scanner keyb) {
-        String title, description, startDate, endDate, time;
-        int maxAttendees, managerID;
-        double cost;
-        String line, line2, line3; //buffer variable 
-        System.out.println();
-        title = getString(keyb, "Enter the Title: ");
-        description = getString(keyb, "Describe the event: ");
-        startDate = getString(keyb, "When date does it start? ");
-        endDate = getString(keyb, "When date does it End? ");
-        time = getString(keyb, "What time does it start? ");
-        line = getString(keyb, "what is the maximum amount of attendees? ");
-        maxAttendees = Integer.parseInt(line);
-        line2 = getString(keyb, "what is the price for this event? ");
-        cost = Double.parseDouble(line2);
-        line3 = getString(keyb, "Enter the manager ID (enter -1 for no manager):");
-        managerID = Integer.parseInt(line3);
-        System.out.println();
+        
+      
+            String title, description, startDate, endDate, time;
+            int maxAttendees, managerID;
+            double cost;
+            String line, line2, line3; //buffer variable 
+            System.out.println();
+            title = getString(keyb, "Enter the Title: ");
+            description = getString(keyb, "Describe the event: ");
+            startDate = getString(keyb, "When date does it start? ");
+            endDate = getString(keyb, "When date does it End? ");
+            time = getString(keyb, "What time does it start? ");
+            line = getString(keyb, "what is the maximum amount of attendees? ");
+            maxAttendees = Integer.parseInt(line);
+            line2 = getString(keyb, "what is the price for this event? ");
+            cost = Double.parseDouble(line2);
+            line3 = getString(keyb, "Enter the manager ID (enter -1 for no manager):");
+            managerID = Integer.parseInt(line3);
+            System.out.println();
 
-        Event e
-                = new Event(title, description, startDate, endDate, time, maxAttendees, cost, managerID);
+            Event e
+                    = new Event(title, description, startDate, endDate, time, maxAttendees, cost, managerID);
 
-        return e;
+            return e;
+        
     }
+
     /*
      private static void editEventDetails(Scanner kb, Event e) {
      String title, desription, startDate, endDate, time;
@@ -227,31 +241,35 @@ public class MainApp {
      }
 
      }*/
-
     //view a single event
-
     private static void viewEvent(Scanner keyboard, Model model) {
+        try {
 
-        System.out.println("Enter the the ID of the Event you would like to View");
-        int eventID = Integer.parseInt(keyboard.nextLine());
-        Event e;
-        e = model.findEventByThe_eID(eventID);
-        if (e != null) {
-            Manager m = model.findManagerById(e.getManagerID());
-            System.out.println();
-            System.out.println("Tile          : " + e.getTitle());
-            System.out.println("Description   : " + e.getDescription());
-            System.out.println("StartDate     : " + e.getStartDate());
-            System.out.println("End Date      : " + e.getEndDate());
-            System.out.println("Time          : " + e.getTime());
-            System.out.println("Max Attendee  : " + e.getMaxAttendees());
-            System.out.println("Cost          : " + e.getCost());
-            System.out.println("Manager       : " + ((m != null) ? m.getName() : "--NO MANAGER--"));
-            System.out.println();
+            System.out.println("Enter the the ID of the Event you would like to View");
+            int eventID = Integer.parseInt(keyboard.nextLine());
+            Event e;
+            e = model.findEventByThe_eID(eventID);
+            if (e != null) {
+                Manager m = model.findManagerById(e.getManagerID());
+                System.out.println();
+                System.out.println("Tile          : " + e.getTitle());
+                System.out.println("Description   : " + e.getDescription());
+                System.out.println("StartDate     : " + e.getStartDate());
+                System.out.println("End Date      : " + e.getEndDate());
+                System.out.println("Time          : " + e.getTime());
+                System.out.println("Max Attendee  : " + e.getMaxAttendees());
+                System.out.println("Cost          : " + e.getCost());
+                System.out.println("Manager       : " + ((m != null) ? m.getName() : "--NO MANAGER--"));
+                System.out.println();
 
-        } else {
-            System.out.println("Event not found");
+            } else {
+                System.out.println("Event not found");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("-Incorrect Data Type Or Null Input.");
+            System.out.println("Number Format Exception: " + e.getMessage() + ".\n");
         }
+
     }
 
     //Edit code (This Code Gets String From Keyboard And Places Current Info And Placement Reads New Value):
@@ -307,50 +325,65 @@ public class MainApp {
     //--------------------------------------MANAGERS TABLE--------------------------------------------
     //---------------------------------CREATE MANAGERS ------------------------------  
     private static void createManager(Scanner keyboard, Model model) {
+        try {
 
-        Manager m = readManager(keyboard);
-        if (model.addManager(m)) {
-            System.out.println("Manager succesfully added to the database!\n");
-        } else {
-            System.out.println("Manager Not added to the database!\n");
+            Manager m = readManager(keyboard);
+            if (model.addManager(m)) {
+                System.out.println("Manager succesfully added to the database!\n");
+            } else {
+                System.out.println("Manager Not added to the database!\n");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("-Incorrect Data Type Or Null Input.");
+            System.out.println("Number Format Exception: " + e.getMessage() + ".\n");
         }
 
     }//end of CreateManager
 
     //---------------------------------DELETE MANAGERS ------------------------------  
     private static void deleteManager(Scanner keyboard, Model model) {
-        System.out.println("Deleting Manager");
-        System.out.println("Enter the the ID of the Manager you would like to Delete");
-        int managerID = Integer.parseInt(keyboard.nextLine());
-        Manager m;
-        m = model.findManagerByThe_mID(managerID);
-        if (m != null) {
-            if (model.removeManager(m)) {
-                System.out.println("Manager Deleted");
+        try {
+            System.out.println("Deleting Manager");
+            System.out.println("Enter the the ID of the Manager you would like to Delete");
+            int managerID = Integer.parseInt(keyboard.nextLine());
+            Manager m;
+            m = model.findManagerByThe_mID(managerID);
+            if (m != null) {
+                if (model.removeManager(m)) {
+                    System.out.println("Manager Deleted");
+                } else {
+                    System.out.println("Manager not Deleted");
+                }
             } else {
-                System.out.println("Manager not Deleted");
+                System.out.println("Manager not found");
             }
-        } else {
-            System.out.println("Manager not found");
+        } catch (NumberFormatException e) {
+            System.out.println("-Incorrect Data Type Or Null Input.");
+            System.out.println("Number Format Exception: " + e.getMessage() + ".\n");
         }
     }
 
     //------------------------------edit an event---------------------------
     private static void editManager(Scanner kb, Model model) {
-        System.out.println("Enter the the ID of the Manager you would like to Edit");
-        int managerID = Integer.parseInt(kb.nextLine());
-        Manager m;
+        try {
+            System.out.println("Enter the the ID of the Manager you would like to Edit");
+            int managerID = Integer.parseInt(kb.nextLine());
+            Manager m;
 
-        m = model.findManagerByThe_mID(managerID);
-        if (m != null) {
-            editManagerDetails(kb, m);
-            if (model.updateManager(m)) {
-                System.out.println("Manager Updated\n");
+            m = model.findManagerByThe_mID(managerID);
+            if (m != null) {
+                editManagerDetails(kb, m);
+                if (model.updateManager(m)) {
+                    System.out.println("Manager Updated\n");
+                } else {
+                    System.out.println("Manager not Updated\n");
+                }
             } else {
-                System.out.println("Manager not Updated\n");
+                System.out.println("Manager not found!!\n");
             }
-        } else {
-            System.out.println("Manager not found!!\n");
+        } catch (NumberFormatException e) {
+            System.out.println("-Incorrect Data Type Or Null Input.");
+            System.out.println("Number Format Exception: " + e.getMessage() + ".\n");
         }
 
     }
@@ -393,10 +426,10 @@ public class MainApp {
                 System.out.print("This manager is not assigned to any Events right now");
                 System.out.println();
             } else {
-                 System.out.println();
+                System.out.println();
                 System.out.print("This manager is assigned to the following Events: ");
-                 System.out.println();
-                 displayEvents(eventList, model);
+                System.out.println();
+                displayEvents(eventList, model);
 
             }
 
@@ -405,7 +438,7 @@ public class MainApp {
         }
     }
 
-        //---------------------------------VIEW MANAGERS END------------------------------
+    //---------------------------------VIEW MANAGERS END------------------------------
     //---------------------------------READ MANAGERS ------------------------------  
     //Utility Methods used by main methods ^^
     private static Manager readManager(Scanner keyb) {
@@ -437,8 +470,26 @@ public class MainApp {
 
     }
 
+    //input and exception
+    private static int getInt(Scanner keyboard, String prompt) {
+        int opt = 0;
+        boolean finished = false;
+
+        do {
+            try {
+                System.out.println(prompt);
+                String line = keyboard.nextLine();
+                opt = Integer.parseInt(line);
+                finished = true;
+            } catch (NumberFormatException e) {
+                System.out.println("Exception: " + e.getMessage());
+            }
+        } while (!finished);
+        return opt;
+    }
+
     private static void doEventMenu(Scanner keyboard, Model model) {
-        
+        try {
 
             int opt;
 
@@ -455,9 +506,7 @@ public class MainApp {
                 System.out.println("-5 View Single Event.");
                 System.out.println("-6 Back To Tables.");
 
-                System.out.print("-Enter Option:");
-                String line = keyboard.nextLine();
-                opt = Integer.parseInt(line);
+                opt = getInt(keyboard, "Enter option");
 
                 //If Options Is CLicked Then Break:
                 System.out.println("-You Chose Option: " + opt);
@@ -495,7 +544,12 @@ public class MainApp {
                 }
             } //Once Not Equals To 5 Programes Runs Else Stops:
             while (opt != 6);
-        
+
+        } catch (NumberFormatException e) {
+            System.out.println("-Incorrect Data Type Or Null Input.");
+            System.out.println("Number Format Exception: " + e.getMessage() + ".\n");
+        }
+
     }
 
     private static void doManagerMenu(Scanner keyboard, Model model) {
@@ -516,9 +570,7 @@ public class MainApp {
                 System.out.println("-5 View Single Managers.");
                 System.out.println("-6 Back To Tables.");
 
-                System.out.print("-Enter Option:");
-                String line = keyboard.nextLine();
-                opt = Integer.parseInt(line);
+                opt = getInt(keyboard, "Enter option");
 
                 //If Options Is CLicked Then Break:
                 System.out.println("-You Chose Option: " + opt);
