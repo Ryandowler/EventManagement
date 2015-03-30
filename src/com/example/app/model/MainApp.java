@@ -6,109 +6,43 @@ import java.util.Scanner;
 
 public class MainApp {
 
+    //Sets Up User Interface Options:
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
         Model model = Model.getInstance();
-        // add in Event e;
-        System.out.println("Enter 'Event' to create a new Event");
-        System.out.println("Enter 'Manager' to inser a Manager");
-        String option = keyboard.nextLine();
-        if(option.equals("Event") || option.equals("event") || option.equals("e"))
-        {
- 
-            int opt;
-            do {
-                System.out.println("1. Create a new Event");
-                System.out.println("2. Delete an existing Event");
-                System.out.println("3. Edit an existing Event");
-                System.out.println("4. View all Events");
-                System.out.println("5. Exit");
-
-                System.out.print("Enter option: ");
-                String line = keyboard.nextLine();
-                opt = Integer.parseInt(line);
-
-                System.out.println("You chose option: " + opt);
-
-                switch (opt) {
-                    case 1: {
-                        System.out.println("Attempting to Create Event . .");
-                        createEvent(keyboard, model);
-                        break;
-                    }
-                    case 2: {
-                        System.out.println("Attempting to Delete Event . .");
-                        deleteEvent(keyboard, model);
-                        break;
-                    }
-                    case 3: {
-                        System.out.println("Attempting to Edit Event" );
-                        editEvent(keyboard, model);
-                        break;
-                    }
-                    case 4: {
-                        System.out.println("Attempting to View Event");
-                        viewEvents(model);
-                        break;
-                    }
-                }
-            } while (opt != 5);
-            System.out.println("Goodbye");
-        }
-        // ----------------------------------------------------------------------Manager table----------------------------------------------------------------
-        else if(option.equals("Manager") || option.equals("manager") || option.equals("m"))
-        {
-               int optMan;
-            do {
-                System.out.println("1. Insert a Manager");
-                System.out.println("2. Delete an existing Manager");
-                System.out.println("3. Edit an existing Manager");
-                System.out.println("4. View all Manager");
-                System.out.println("5. Exit");
-
-                System.out.print("Enter option: ");
-                String line = keyboard.nextLine();
-                optMan = Integer.parseInt(line);
-
-                System.out.println("You chose option: " + optMan);
-
-                switch (optMan) {
-                    case 1: {
-                        System.out.println("Attempting to insert Manager . .");
-                        createEvent(keyboard, model);
-                        break;
-                    }
-                    case 2: {
-                        System.out.println("Attempting to Delete Manager . .");
-                        deleteEvent(keyboard, model);
-                        break;
-                    }
-                    case 3: {
-                        System.out.println("Attempting to Edit Manager" );
-                        editEvent(keyboard, model);
-                        break;
-                    }
-                    case 4: {
-                        System.out.println("Attempting to View Manager");
-                        viewManagers(model);
-                        break;
-                    }
-                }
-            }while (optMan != 5);
-            System.out.println("Goodbyeee");  
-        }
-    }//main method end
+        String option = null;
+        do {
+            System.out.println("EVENT MANAGEMENT COMPANY APP");
+            System.out.println("---------------------");
+            System.out.println();
+            System.out.println("-1 EVENT TABLE");
+            System.out.println("-2 MANAGER TABLE");
+            System.out.println("-3 EXIT APP");
+            System.out.println("-Choose A Table: ");
+            option = keyboard.nextLine();
+            if (option.equals("Event") || option.equals("event") || option.equals("e") || option.equals("1")) {
+                doEventMenu(keyboard, model);
+            } else if (option.equals("Manager") || option.equals("Manager") || option.equals("m") || option.equals("2")) {
+                doManagerMenu(keyboard, model);
+            }
+        } while (!(option.equals("Exit") || option.equals("exit") || option.equals("ex") || option.equals("3")));
+    }
 
     //Methods used in above cases
     //Create Event Method
-    private static void createEvent(Scanner keyboard, Model model) {
-        Event e = readEvent(keyboard);
-        if (model.addEvent(e)) {
-            System.out.println("Event succesfully added to the database!\n");
-        } else {
-            System.out.println("Event Not added to the database!\n");
-        }
-    }
+   
+   
+            private static void createEvent(Scanner keyboard, Model model)  {
+                Event e = readEvent(keyboard);
+                if (model.addEvent(e)) {
+                    System.out.println("Event succesfully added to the database!\n");
+                } else {
+                    System.out.println("Event Not added to the database!\n");
+                }
+            }
+            
+    
+    
 
     //Delete Event Method
     private static void deleteEvent(Scanner keyboard, Model model) {
@@ -153,8 +87,7 @@ public class MainApp {
         System.out.println();
         if (events.isEmpty()) {
             System.out.println("There are no events to see");
-        }
-        else{
+        } else {
             System.out.printf("%7s %40s %50s %20s %20s %20s %20s %9s\n", "eventID", "Title", "description", "startDate", "endDate", "time", "maxAttendees", "cost", "manager");
             for (Event ev : events) {
                 System.out.printf("%7d %40s %50s %20s %20s %20s %20d %9.2f %7s\n",
@@ -191,7 +124,7 @@ public class MainApp {
         line = getString(keyb, "what is the price for this event? ");
         cost = Double.parseDouble(line);
         line = getString(keyb, "Enter the manager ID (enter -1 for no manager):");
-        managerID= Integer.parseInt(line);
+        managerID = Integer.parseInt(line);
 
         Event e
                 = new Event(title, description, startDate, endDate, time, maxAttendees, cost, managerID);
@@ -249,24 +182,208 @@ public class MainApp {
         }
 
     }
-    // MANAGERS TABLE--------------------------------------------
-        private static void viewManagers(Model mdl) {
+
+    //--------------------------------------MANAGERS TABLE--------------------------------------------
+    //---------------------------------CREATE MANAGERS ------------------------------  
+    private static void createManager(Scanner keyboard, Model model) {
+        Manager m = readManager(keyboard);
+        if (model.addManager(m)) {
+            System.out.println("Manager succesfully added to the database!\n");
+        } else {
+            System.out.println("Manager Not added to the database!\n");
+        }
+    }
+
+    //---------------------------------DELETE MANAGERS ------------------------------  
+    private static void deleteManager(Scanner keyboard, Model model) {
+        System.out.println("Deleting Manager");
+        System.out.println("Enter the the ID of the Manager you would like to Delete");
+        int managerID = Integer.parseInt(keyboard.nextLine());
+        Manager m;
+        m = model.findManagerByThe_mID(managerID);
+        if (m != null) {
+            if (model.removeManager(m)) {
+                System.out.println("Manager Deleted");
+            } else {
+                System.out.println("Manager not Deleted");
+            }
+        } else {
+            System.out.println("Manager not found");
+        }
+    }
+
+    //------------------------------edit an event---------------------------
+    private static void editManager(Scanner kb, Model model) {
+        System.out.println("Enter the the ID of the Manager you would like to Edit");
+        int managerID = Integer.parseInt(kb.nextLine());
+        Manager m;
+
+        m = model.findManagerByThe_mID(managerID);
+        if (m != null) {
+            editManagerDetails(kb, m);
+            if (model.updateManager(m)) {
+                System.out.println("Manager Updated\n");
+            } else {
+                System.out.println("Manager not Updated\n");
+            }
+        } else {
+            System.out.println("Manager not found!!\n");
+        }
+
+    }
+
+    //---------------------------------VIEW MANAGERS ------------------------------  
+    private static void viewManagers(Model mdl) {
         List<Manager> managers = mdl.getManagers();
         System.out.println();
         if (managers.isEmpty()) {
             System.out.println("There are no Managers to see");
-        }
-        else{
-            System.out.printf("%7s %20s\n", "eventID", "name");
+        } else {
+            System.out.printf("%7s %20s %15s\n", "managerID", "name", "managerEmail");
             for (Manager ma : managers) {
-                System.out.printf("%7d %20s\n",
+                System.out.printf("%7d %20s %30s\n",
                         ma.getManagerID(),
-                        ma.getName()
+                        ma.getName(),
+                        ma.getManagerEmail()
                 );
             }
         }
         //make a line of white space
         System.out.println();
+    }
+        //---------------------------------VIEW MANAGERS END------------------------------
+
+    //---------------------------------READ MANAGERS ------------------------------  
+    //Utility Methods used by main methods ^^
+    private static Manager readManager(Scanner keyb) {
+        String name, managerEmail;
+
+        name = getString(keyb, "Enter Managers Name: ");
+        managerEmail = getString(keyb, "Enter Managers email: ");
+
+        Manager m
+                = new Manager(name, managerEmail);
+
+        return m;
+    }
+    //---------------------------------READ MANAGERS END------------------------------
+
+    private static void editManagerDetails(Scanner kb, Manager m) {
+        String name, managerEmail;
+
+        name = getString(kb, "Enter the name[" + m.getName() + "] ");
+        managerEmail = getString(kb, "Enter the Email[" + m.getManagerEmail() + "] ");
+
+        //if field is not empty the entered data becomes the new titl/description
+        if (name.length() != 0) {
+            m.setName(name);
+        }
+        if (managerEmail.length() != 0) {
+            m.setManagerEmail(managerEmail);
+        }
+
+    }
+
+    private static void doEventMenu(Scanner keyboard, Model model) {
+        int opt;
+
+        // Do/While Loop For Possible Options, As Long As 5 Is Not Entered It Will Continue To Run:
+        do {
+            System.out.println();
+            System.out.println("-EVENT TABLE");
+            System.out.println("----------");
+            System.out.println();
+            System.out.println("-1 Create A New Event.");
+            System.out.println("-2 Delete Existing Event.");
+            System.out.println("-3 Edit Existing Event.");
+            System.out.println("-4 View All Events.");
+            System.out.println("-5 Back To Tables.");
+
+            System.out.print("-Enter Option:");
+            String line = keyboard.nextLine();
+            opt = Integer.parseInt(line);
+
+            //If Options Is CLicked Then Break:
+            System.out.println("-You Chose Option: " + opt);
+            switch (opt) {
+                //To Create A New Event:
+                case 1: {
+                    System.out.println("-Creating A New Event.");
+                    createEvent(keyboard, model);
+                    break;
+                }
+                //To Delete A Existing Event:
+                case 2: {
+                    System.out.println("-Deleting A Event.");
+                    deleteEvent(keyboard, model);
+                    break;
+                }
+                //To Update A Existing Event:
+                case 3: {
+                    System.out.println("-Updating A Event.");
+                    editEvent(keyboard, model);
+                    break;
+                }
+                //To View All Event:
+                case 4: {
+                    System.out.println("-Viewing All Event.");
+                    viewEvents(model);
+                    break;
+                }
+            }
+        } //Once Not Equals To 5 Programes Runs Else Stops:
+        while (opt != 5);
+    }
+
+    private static void doManagerMenu(Scanner keyboard, Model model) {
+        int opt;
+
+        // Do/While Loop For Possible Options, As Long As 5 Is Not Entered It Will Continue To Run:
+        do {
+            System.out.println();
+            System.out.println("-MANAGER TABLE");
+            System.out.println("----------");
+            System.out.println();
+            System.out.println("-1 Create A New Manager.");
+            System.out.println("-2 Delete Existing Manager.");
+            System.out.println("-3 Edit Existing Manager.");
+            System.out.println("-4 View All Managers.");
+            System.out.println("-5 Back To Tables.");
+
+            System.out.print("-Enter Option:");
+            String line = keyboard.nextLine();
+            opt = Integer.parseInt(line);
+
+            //If Options Is CLicked Then Break:
+            System.out.println("-You Chose Option: " + opt);
+            switch (opt) {
+                //To Create A New Manager:
+                case 1: {
+                    System.out.println("-Creating A New Manager.");
+                    createManager(keyboard, model);
+                    break;
+                }
+                //To Delete A Existing Manager:
+                case 2: {
+                    System.out.println("-Deleting A Manager.");
+                    deleteManager(keyboard, model);
+                    break;
+                }
+                //To Update A Existing Manager:
+                case 3: {
+                    System.out.println("-Updating A Manager.");
+                    editManager(keyboard, model);
+                    break;
+                }
+                //To View All Managers:
+                case 4: {
+                    System.out.println("-Viewing All Manager.");
+                    viewManagers(model);
+                    break;
+                }
+            }
+        } //Once Not Equals To 5 Programes Runs Else Stops:
+        while (opt != 5);
     }
 
 }
