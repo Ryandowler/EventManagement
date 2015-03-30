@@ -168,10 +168,10 @@ public class EventTableGateway {
         if (mID == -1) {
             stmt.setNull(8, java.sql.Types.INTEGER);
         }
-        else {
+        else{
             stmt.setInt(8, mID);
         }
-        stmt.setInt(9, e.getManagerID());
+        stmt.setInt(9, e.getEventID());
 
 
         //  execute the query 

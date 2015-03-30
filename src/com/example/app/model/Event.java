@@ -104,3 +104,75 @@ public class Event {
 
 
 }
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+    
+    
+    
+    //Edit Code If/Else If Table Is Updated Or Not:
+    private static void editBus(Scanner kb, Model m) {
+        try {
+            System.out.print("-Enter The Bus ID You Want To Edit: ");
+            int busID = Integer.parseInt(kb.nextLine());
+            Bus b;
+ 
+            b = m.findBusByBusID(busID);
+            if (b != null) {
+                editBusDetails(kb, b);
+                if (m.updateBus(b)) {
+                    System.out.println("-Bus Updated.\n");
+                } else {
+                    System.out.println("-Bus Not Updated.\n");
+                }
+            } else {
+                System.out.println("-Bus Not Found.\n");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("-Incorrect Data Type Or Null Input.");
+            System.out.println("Number Format Exception: " + e.getMessage() + ".\n");
+        }
+    }
+    ####################################
+
+
+ //Code Add Garage:
+    public boolean addGarage(Garage g) {
+        boolean result = false;
+        try {
+            int garageID = this.garageGateway.insertGarage(g.getGarageName(), g.getGarageAddress(), g.getGaragePhoneNo(), g.getManagerName());
+            if (garageID != -1) {
+                g.setGarageID(garageID);
+                this.garages.add(g);
+                result = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+    
+
+*/
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
