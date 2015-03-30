@@ -124,9 +124,9 @@ public class EventTableGateway {
     public boolean deleteEvent(int ID) throws SQLException {
         String query;
         PreparedStatement stmt;
-        int numRowsAffected = 0;
+        int numRowsAffected;
 
-        query = " DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
+        query = "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
 
         stmt = mConnection.prepareStatement(query);
         stmt.setInt(1, ID);

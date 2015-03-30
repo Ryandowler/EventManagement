@@ -22,6 +22,7 @@ public class Model {
     List<Manager> managers;
     EventTableGateway eventGateway;
     ManagerTableGateway managerGateway;
+    
 
     // connecting to DB
 
@@ -111,37 +112,56 @@ public class Model {
     public List<Manager> getManagers() {
         return this.managers;
     }
+    
+      Manager findManagerByThe_mID(int mID) {
+        Manager m = null;
+        int i = 0;
+        boolean found = false;
+        while (i < this.managers.size() && !found) {
+            m = this.managers.get(i);
+            if (m.getManagerID() == mID) {
+                found = true;
+            } else {
+                i++;
+            }
+        }
+        if (!found) {
+            m = null;
+        }
+        return m;
+    }
+      
     public boolean addManager(Manager m) {
         boolean result = false;
         try {
-            int managerID = this.managerGateway.insertManager(m.getName());
-            if (managerID != -1) {
-                m.setManagerID(managerID);
-                this.managers.add(m);
-                result = true;
-            }
+            int managerID = this.managerGateway.insertManager
+            (m.getName(), m.getManagerEmail());
         }
         catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
     }
+    
+   
 
     public boolean removeManager(Manager m) {
         boolean removed = false;
 
         try {
             removed = this.managerGateway.deleteManager(m.getManagerID());
-            if (removed) {
+            /*if (removed) {
                 removed = this.managers.remove(m);
-            }
+            }             */
         }
         catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return removed;
     }
+
+    
+    
     
     Manager findManagerById(int managerID) {
         Manager m = null;
@@ -173,16 +193,6 @@ public class Model {
 
         return updated;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+     
 
 }
