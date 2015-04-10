@@ -12,10 +12,14 @@ public class DBConnection {
     public static Connection getInstance() throws ClassNotFoundException, SQLException {
         String host, db, user, password;
         
-        host = "daneel";
-        db = "N00134315";
-        user = "N00134315";
-        password = "N00134315";
+        //host = "daneel";
+        //db = "N00134315";
+        //user = "N00134315";
+        //password = "N00134315";
+        host = "localhost";
+        db = "n00134315";
+        user = "root";
+        password = "";
         
         //make sure their isnt alreeady a connection/ make one if so
         if (sConnection == null || sConnection.isClosed()) {

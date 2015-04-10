@@ -1,10 +1,16 @@
 package com.example.app.model;
 //huhh
 
+import com.example.app.ManagerEmailComparator;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-
+//updated
 public class MainApp {
+
+    private static final int NAME_ORDER = 1;
+    private static final int EMAIL_ORDER = 2;
 
     //Sets Up User Interface Options:
     public static void main(String[] args) {
@@ -167,31 +173,30 @@ public class MainApp {
 
     //Utility Methods used by main methods ^^
     private static Event readEvent(Scanner keyb) {
-        
-      
-            String title, description, startDate, endDate, time;
-            int maxAttendees, managerID;
-            double cost;
-            String line, line2, line3; //buffer variable 
-            System.out.println();
-            title = getString(keyb, "Enter the Title: ");
-            description = getString(keyb, "Describe the event: ");
-            startDate = getString(keyb, "When date does it start? ");
-            endDate = getString(keyb, "When date does it End? ");
-            time = getString(keyb, "What time does it start? ");
-            line = getString(keyb, "what is the maximum amount of attendees? ");
-            maxAttendees = Integer.parseInt(line);
-            line2 = getString(keyb, "what is the price for this event? ");
-            cost = Double.parseDouble(line2);
-            line3 = getString(keyb, "Enter the manager ID (enter -1 for no manager):");
-            managerID = Integer.parseInt(line3);
-            System.out.println();
 
-            Event e
-                    = new Event(title, description, startDate, endDate, time, maxAttendees, cost, managerID);
+        String title, description, startDate, endDate, time;
+        int maxAttendees, managerID;
+        double cost;
+        String line, line2, line3; //buffer variable 
+        System.out.println();
+        title = getString(keyb, "Enter the Title: ");
+        description = getString(keyb, "Describe the event: ");
+        startDate = getString(keyb, "When date does it start? ");
+        endDate = getString(keyb, "When date does it End? ");
+        time = getString(keyb, "What time does it start? ");
+        line = getString(keyb, "what is the maximum amount of attendees? ");
+        maxAttendees = Integer.parseInt(line);
+        line2 = getString(keyb, "what is the price for this event? ");
+        cost = Double.parseDouble(line2);
+        line3 = getString(keyb, "Enter the manager ID (enter -1 for no manager):");
+        managerID = Integer.parseInt(line3);
+        System.out.println();
 
-            return e;
-        
+        Event e
+                = new Event(title, description, startDate, endDate, time, maxAttendees, cost, managerID);
+
+        return e;
+
     }
 
     /*
@@ -389,12 +394,22 @@ public class MainApp {
     }
 
     //---------------------------------VIEW MANAGERS ------------------------------  
-    private static void viewManagers(Model mdl) {
+    private static void viewManagers(Model mdl, int order) {
         List<Manager> managers = mdl.getManagers();
         System.out.println();
         if (managers.isEmpty()) {
             System.out.println("There are no Managers to see");
         } else {
+            if (order == NAME_ORDER) {
+                Collections.sort(managers);
+                }
+            else if (order == EMAIL_ORDER){
+                     Comparator<Manager> cmptr = new ManagerEmailComparator();
+                     Collections.sort(managers, cmptr);
+                    }
+
+            
+            Collections.sort(managers);
             System.out.printf("%7s %20s %15s\n", "managerID", "name", "managerEmail");
             for (Manager ma : managers) {
                 System.out.printf("%7d %20s %30s\n",
@@ -567,8 +582,9 @@ public class MainApp {
                 System.out.println("-2 Delete Existing Manager.");
                 System.out.println("-3 Edit Existing Manager.");
                 System.out.println("-4 View All Managers.");
-                System.out.println("-5 View Single Managers.");
-                System.out.println("-6 Back To Tables.");
+                System.out.println("-5 View All Managers by Name.");
+                System.out.println("-6 View Single Managers.");
+                System.out.println("-7 Back To Tables.");
 
                 opt = getInt(keyboard, "Enter option");
 
@@ -596,17 +612,22 @@ public class MainApp {
                     //To View All Managers:
                     case 4: {
                         System.out.println("-Viewing All Manager.");
-                        viewManagers(model);
+                        viewManagers(model, NAME_ORDER);
                         break;
                     }
                     case 5: {
+                        System.out.println("-Viewing All Managers by Name.");
+                        viewManagers(model, EMAIL_ORDER);
+                        break;
+                    }
+                    case 6: {
                         System.out.println("-Viewing Single Manager.");
                         viewManager(keyboard, model);
                         break;
                     }
                 }
             } //Once Not Equals To 5 Programes Runs Else Stops:
-            while (opt != 6);
+            while (opt != 7);
         } catch (NumberFormatException e) {
             System.out.println("-Incorrect Data Type Or Null Input.");
             System.out.println("Number Format Exception: " + e.getMessage() + ".\n");

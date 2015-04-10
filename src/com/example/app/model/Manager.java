@@ -1,6 +1,6 @@
 package com.example.app.model;
 
-public class Manager {
+public class Manager implements Comparable<Manager>{
 
     private int managerID;
     private String name;
@@ -40,5 +40,14 @@ public class Manager {
     
     public void setManagerEmail(String managerEmail) {
         this.managerEmail = managerEmail;
+    }
+
+    @Override
+    //make my objects compareable
+    public int compareTo(Manager that) {
+        String myName = this.getName();
+        String yourName = that.getName();
+        
+      return  myName.compareTo(yourName);
     }
 }
