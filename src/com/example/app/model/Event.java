@@ -1,7 +1,7 @@
 package com.example.app.model;
 
-public class Event {
-
+public class Event implements Comparable<Event> {
+   //variables
     private int eventID;
     private String title;
     private String description;
@@ -11,8 +11,7 @@ public class Event {
     private int maxAttendees;
     private double cost;
     private int managerID;
-//yet another
-    //new comment
+
 //creating the constructor, needed as my above variables are private, so this is how i access them 1
     public Event(int eID, String t, String d, String sd, String ed, String tm, int ma, double c, int mID) {
         this.eventID = eID;
@@ -29,7 +28,7 @@ public class Event {
     public Event(String t, String d, String sd, String ed, String tm, int ma, double c, int mID) {
         this(-1, t, d, sd, ed, tm, ma, c, mID);
     }
-
+    //get and sets
     public int getEventID() {
         return eventID;
     }
@@ -100,6 +99,14 @@ public class Event {
 
     public void setManagerID(int managerID) {
         this.managerID = managerID;
+    }
+
+    @Override
+    public int compareTo(Event that) {
+      String myTitle = this.getTitle();
+      String yourTitle = that.getTitle();
+      
+      return  myTitle.compareTo(yourTitle);
     }
 
 

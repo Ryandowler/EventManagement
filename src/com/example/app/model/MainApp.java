@@ -1,16 +1,18 @@
 package com.example.app.model;
 //huhh
 
-import com.example.app.ManagerEmailComparator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 //updated
+
 public class MainApp {
 
     private static final int NAME_ORDER = 1;
-    private static final int EMAIL_ORDER = 2;
+    private static final int TITLE_ORDER = 1;
+    private static final int COST_ORDER = 2;
+    private static final int ID_ORDER = 2;
 
     //Sets Up User Interface Options:
     public static void main(String[] args) {
@@ -28,7 +30,7 @@ public class MainApp {
 
                 System.out.println("-Choose A Table: ");
                 option = keyboard.nextLine();
-                if (option.equals("Event") || option.equals("event") || option.equals("e") || option.equals("1")) {
+                if(option.equals("Event") || option.equals("event") || option.equals("e") || option.equals("1")) {
                     doEventMenu(keyboard, model);
                 } else if (option.equals("Manager") || option.equals("Manager") || option.equals("m") || option.equals("2")) {
                     doManagerMenu(keyboard, model);
@@ -132,12 +134,19 @@ public class MainApp {
      System.out.println();
      }*/
     //Code For Viewing All events:
-    private static void viewEvents(Model model) {
+    private static void viewEvents(Model model, int order) {
         List<Event> events = model.getEvents();
         System.out.println();
         if (events.isEmpty()) {
             System.out.println("-There Are No Events In The Database.");
         } else {
+            if (order == TITLE_ORDER) {
+                Collections.sort(events);
+            } 
+            else if (order == COST_ORDER){
+                Comparator<Event> cmptrEvent = new EventCostComparator();
+                Collections.sort(events, cmptrEvent);
+            }
             displayEvents(events, model);
         }
         System.out.println();
@@ -197,7 +206,7 @@ public class MainApp {
 
         return e;
 
-    }
+    }//
 
     /*
      private static void editEventDetails(Scanner kb, Event e) {
@@ -270,7 +279,7 @@ public class MainApp {
             } else {
                 System.out.println("Event not found");
             }
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e){
             System.out.println("-Incorrect Data Type Or Null Input.");
             System.out.println("Number Format Exception: " + e.getMessage() + ".\n");
         }
@@ -402,15 +411,18 @@ public class MainApp {
         } else {
             if (order == NAME_ORDER) {
                 Collections.sort(managers);
-                }
-            else if (order == EMAIL_ORDER){
-                     Comparator<Manager> cmptr = new ManagerEmailComparator();
-                     Collections.sort(managers, cmptr);
-                    }
-
-            
-            Collections.sort(managers);
-            System.out.printf("%7s %20s %15s\n", "managerID", "name", "managerEmail");
+            } 
+            else if (order == ID_ORDER) {
+                Comparator<Manager> cmptr = new ManagerIDComparator();
+                Collections.sort(managers, cmptr);
+            }
+            displayManagers(managers, mdl);
+        }
+        //make a line of white space
+        System.out.println();
+    }
+     private static void displayManagers(List<Manager> managers, Model model) {
+         System.out.printf("%7s %20s %15s\n", "managerID", "name", "managerEmail");
             for (Manager ma : managers) {
                 System.out.printf("%7d %20s %30s\n",
                         ma.getManagerID(),
@@ -418,11 +430,8 @@ public class MainApp {
                         ma.getManagerEmail()
                 );
             }
-        }
-        //make a line of white space
-        System.out.println();
-    }
-
+         
+     }
     //view single manager
     private static void viewManager(Scanner keyboard, Model model) {
         System.out.println("Enter the the ID of the Manager you would like to View");
@@ -518,8 +527,9 @@ public class MainApp {
                 System.out.println("-2 Delete Existing Event.");
                 System.out.println("-3 Edit Existing Event.");
                 System.out.println("-4 View All Events.");
-                System.out.println("-5 View Single Event.");
-                System.out.println("-6 Back To Tables.");
+                System.out.println("-5 View All Events By Cost.");
+                System.out.println("-6 View Single Event.");
+                System.out.println("-7 Back To Tables.");
 
                 opt = getInt(keyboard, "Enter option");
 
@@ -547,18 +557,23 @@ public class MainApp {
                     //To View All Event:
                     case 4: {
                         System.out.println("-Viewing All Event.");
-                        viewEvents(model);
+                        viewEvents(model, TITLE_ORDER);
                         break;
                     }
-                    //To View All Event:
                     case 5: {
+                        System.out.println("-Viewing All Event By cost.");
+                        viewEvents(model, COST_ORDER);
+                        break;
+                    }
+                    //To View single Event:
+                    case 6: {
                         System.out.println("-Viewing Single Event.");
                         viewEvent(keyboard, model);
                         break;
                     }
                 }
             } //Once Not Equals To 5 Programes Runs Else Stops:
-            while (opt != 6);
+            while (opt != 7);
 
         } catch (NumberFormatException e) {
             System.out.println("-Incorrect Data Type Or Null Input.");
@@ -582,7 +597,7 @@ public class MainApp {
                 System.out.println("-2 Delete Existing Manager.");
                 System.out.println("-3 Edit Existing Manager.");
                 System.out.println("-4 View All Managers.");
-                System.out.println("-5 View All Managers by Name.");
+                System.out.println("-5 View All Managers by ID.");
                 System.out.println("-6 View Single Managers.");
                 System.out.println("-7 Back To Tables.");
 
@@ -616,8 +631,8 @@ public class MainApp {
                         break;
                     }
                     case 5: {
-                        System.out.println("-Viewing All Managers by Name.");
-                        viewManagers(model, EMAIL_ORDER);
+                        System.out.println("-Viewing All Managers by ID.");
+                        viewManagers(model, ID_ORDER);
                         break;
                     }
                     case 6: {
