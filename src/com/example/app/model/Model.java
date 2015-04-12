@@ -18,7 +18,6 @@ public class Model {
         //if i call again this will just return instance, can only have one
         return instance;
     }
-
     List<Event> events;
     List<Manager> managers;
     EventTableGateway eventGateway;
@@ -31,7 +30,6 @@ public class Model {
             //conn (connection object) being used as a parametor 
             this.eventGateway = new EventTableGateway(conn);
             this.managerGateway = new ManagerTableGateway(conn);
-
             this.events = this.eventGateway.getEvents();
             this.managers = this.managerGateway.getManagers();
         } catch (ClassNotFoundException ex) {
@@ -40,8 +38,8 @@ public class Model {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
     //last was working here 44:20 on video, need to add in the trys and catchs
+
     public boolean addEvent(Event e) {
         boolean successful = false;
         try {
@@ -61,7 +59,6 @@ public class Model {
 
     public boolean removeEvent(Event e) {
         boolean removed = false;
-
         try {
             removed = this.eventGateway.deleteEvent(e.getEventID());
         } catch (SQLException ex) {
@@ -71,10 +68,6 @@ public class Model {
     }
 
     //leave underneth
-    //public List<Event> getEvents() {
-    //    return this.events;
-    // }
-    //Get Bus List Code:
     public List<Event> getEvents() {
         try {
             this.events = this.eventGateway.getEvents();
@@ -124,15 +117,12 @@ public class Model {
 
     //MANAGER TABLE----------------------------------------#
     //array of managers
-    //public List<Manager> getManagers() {
-    //     return this.managers;
-    //}
     public List<Manager> getManagers() {
         try {
             this.managers = this.managerGateway.getManagers();
         } catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }//returning the managers
         return this.managers;
     }
 
@@ -171,7 +161,6 @@ public class Model {
 
     public boolean removeManager(Manager m) {
         boolean removed = false;
-
         try {
             removed = this.managerGateway.deleteManager(m.getManagerID());
             /*if (removed) {
@@ -203,14 +192,11 @@ public class Model {
 
     boolean updateManager(Manager m) {
         boolean updated = false;
-
         try {
             updated = this.managerGateway.updateManager(m);
         } catch (SQLException ex) {
             Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return updated;
     }
-
 }
